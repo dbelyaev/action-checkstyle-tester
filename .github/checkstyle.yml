@@ -1,5 +1,9 @@
 name: Checkstyle
-on: [pull_request, workflow_dispatch]
+
+on:
+  pull_request:
+    types: [ opened, synchronize ]
+  workflow_dispatch:
 
 jobs:
   checkstyle:
