@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: dbelyaev/action-checkstyle@master
+      - uses: dbelyaev/action-checkstyle@test-run-as-non-root-user
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
