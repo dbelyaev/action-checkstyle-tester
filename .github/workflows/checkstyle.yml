@@ -10,14 +10,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checkstyle:
-    name: runner / checkstyle
+
+  test-check:
+    name: runner / checkstyle (github-check)
     runs-on: ubuntu-latest
     timeout-minutes: 5
-
-    permissions:
-      contents: read
-      pull-requests: write
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -26,10 +23,41 @@ jobs:
 
       - uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6.0.0
         with:
-          distribution: 'temurin'
-          java-version: '11'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-check
+          level: info
+
+  test-pr-check:
+    if: github.event_name == 'pull_request'
+    name: runner / checkstyle (github-pr-check)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      - uses: dbelyaev/action-checkstyle@160efa03c2f62cc50646c44df9f05672cf00bbd0 # v3.11.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          level: warning
+          workdir: ./testdata/java/
+
+  test-pr-review:
+    if: github.event_name == 'pull_request'
+    name: runner / checkstyle (github-pr-review)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
 
       - uses: dbelyaev/action-checkstyle@515ce3f1f5a92c30bb695f06675856eb01eb6a63 # v4.0.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
+          level: error
