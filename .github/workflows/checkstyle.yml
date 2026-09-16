@@ -29,7 +29,7 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      - uses: dbelyaev/action-checkstyle@ada3d54c61a086e8d8348886a212c4a2a9411e3c # v3.15.0
+      - uses: dbelyaev/action-checkstyle@515ce3f1f5a92c30bb695f06675856eb01eb6a63 # v4.0.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
